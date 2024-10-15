@@ -4,6 +4,7 @@ import HighlightedText from "../component/core/Homepage/HighlightedText";
 import CTAButton from "../component/core/Homepage/Button";
 import Banner from "../assets/Images/banner.mp4";
 import CodeBlocks from "../component/core/Homepage/CodeBlocks";
+
 const Home = () => {
   return (
     <div>
@@ -45,7 +46,7 @@ const Home = () => {
           ></video>
         </div>
         {/* code section 1 */}
-        <div>
+        <div className="flex flex-col gap-8">
           <CodeBlocks
             position={"lg:flex-row"}
             heading={
@@ -69,6 +70,7 @@ const Home = () => {
             }}
             code={`<!DOCTYPE html>\n<html>\n<head><>Example</\ntitle><linkrel="stylisheet"href="style.css">\n</head>\n<body>\n<h1><a href="/">Header</a>\n</h1>\n<nav><a href="one/">One</a><a href="two/">Two</a>\n<a href="three/">Three</a>\n</nav>`}
             codecolor={"text-yellow-25"}
+            backgroundgradient={<div className="codeblock1 absolute"></div>}
           />
           <CodeBlocks
             position={"lg:flex-row-reverse"}
@@ -92,11 +94,49 @@ const Home = () => {
             }}
             code={`<!DOCTYPE html>\n<html>\n<head><>Example</\ntitle><linkrel="stylisheet"href="style.css">\n</head>\n<body>\n<h1><a href="/">Header</a>\n</h1>\n<nav><a href="one/">One</a><a href="two/">Two</a>\n<a href="three/">Three</a>\n</nav>`}
             codecolor={"text-blue-25"}
+            backgroundgradient={<div className="codeblock2 absolute"></div>}
           />
         </div>
       </div>
 
       {/* section 2 */}
+      <div className="bg-pure-greys-5 text-richblack-700">
+        <div className="homepage_bg h-[333px]">
+          <div className="w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-5 mx-auto">
+            <div className="h-[145px]"></div>
+            <div className="flex gap-7 text-white">
+              <CTAButton active={true} linkto={"/signup"}>
+                <div className="flex items-center gap-2">
+                  Explore full catlog
+                  <i class="ri-arrow-right-line"></i>
+                </div>
+              </CTAButton>
+              <CTAButton active={false} linkto={"/signup"}>
+                Learn More
+              </CTAButton>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col w-11/12 max-w-maxContent mx-auto gap-7 items-center justify-between">
+          <div className="flex gap-5 flex-row mt-[150px] mb-10">
+            <div className="w-[50%] text-4xl font-semibold">
+              Get the skills you need for a{" "}
+              <HighlightedText text={"job that is in demand."} />
+            </div>
+            <div className="w-[50%] flex flex-col gap-10 items-start ">
+              <div className="text-[16px] text-richblack-700 font-semibold">
+                The modern StudyNotion is the dictates its own terms.Today, to
+                be a competitive speacialist requires more than professional
+                skills
+              </div>
+              <div><CTAButton active={true} linkto={"/login"}>
+                Learn More
+              </CTAButton></div>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* section 3 */}
       {/* footer */}
     </div>

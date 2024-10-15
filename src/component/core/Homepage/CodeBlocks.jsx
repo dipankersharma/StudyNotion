@@ -33,8 +33,8 @@ const CodeBlocks = ({
         </div>
       </div>
       {/* section2 */}
-      <div className="h-fit flex flex-row text-[15px] w-[100%] py-2 lg:w-[500px] bg-richblack-800">
-        {/* backgroundgradient */}
+      <div className="h-fit code-border code-border flex flex-row text-[15px] relative w-[100%] py-2 lg:w-[500px] ]">
+        {backgroundgradient}
         <div className="flex flex-col text-center font-inter font-bold text-richblack-300 w-[10%] ">
           <p>1</p>
           <p>2</p>
@@ -63,7 +63,6 @@ const CodeBlocks = ({
           />
         </div>
       </div>
-      
     </div>
   );
 };
