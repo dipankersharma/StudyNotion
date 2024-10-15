@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import HighlightedText from "../component/core/Homepage/HighlightedText";
 import CTAButton from "../component/core/Homepage/Button";
 import Banner from "../assets/Images/banner.mp4";
-
+import CodeBlocks from "../component/core/Homepage/CodeBlocks";
 const Home = () => {
   return (
     <div>
@@ -44,11 +44,56 @@ const Home = () => {
             className="w-fit-content h-full shadow-[20px_20px_0px_-5px_rgba(255,255,255,0.9)]"
           ></video>
         </div>
-      </div>
-       
-       {/* code section 1 */}
-      <div>
-      <codeblock/>
+        {/* code section 1 */}
+        <div>
+          <CodeBlocks
+            position={"lg:flex-row"}
+            heading={
+              <div className="text-4xl font-semibold text-start">
+                Unlock Your <HighlightedText text={"Coding Potential"} /> With
+                Our Online Course
+              </div>
+            }
+            subheading={
+              "Our courses is designed and taught by industry experts who have year of experiences in coding and passionate about sharing their knowledge with you"
+            }
+            ctabtn1={{
+              active: true,
+              linkto: "/signup",
+              btntext: "Try it Yourself ",
+            }}
+            ctabtn2={{
+              active: false,
+              linkto: "/login",
+              btntext: "Learn More",
+            }}
+            code={`<!DOCTYPE html>\n<html>\n<head><>Example</\ntitle><linkrel="stylisheet"href="style.css">\n</head>\n<body>\n<h1><a href="/">Header</a>\n</h1>\n<nav><a href="one/">One</a><a href="two/">Two</a>\n<a href="three/">Three</a>\n</nav>`}
+            codecolor={"text-yellow-25"}
+          />
+          <CodeBlocks
+            position={"lg:flex-row-reverse"}
+            heading={
+              <div className="text-4xl font-semibold text-start">
+                Start <HighlightedText text={"coding in seconds"} />
+              </div>
+            }
+            subheading={
+              "Go ahead, give it a try. Ours hand-on learning environment means you'll be writing real code from very first session"
+            }
+            ctabtn1={{
+              active: true,
+              linkto: "/signup",
+              btntext: "Continue Lesson ",
+            }}
+            ctabtn2={{
+              active: false,
+              linkto: "/login",
+              btntext: "Learn More",
+            }}
+            code={`<!DOCTYPE html>\n<html>\n<head><>Example</\ntitle><linkrel="stylisheet"href="style.css">\n</head>\n<body>\n<h1><a href="/">Header</a>\n</h1>\n<nav><a href="one/">One</a><a href="two/">Two</a>\n<a href="three/">Three</a>\n</nav>`}
+            codecolor={"text-blue-25"}
+          />
+        </div>
       </div>
 
       {/* section 2 */}
