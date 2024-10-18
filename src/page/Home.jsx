@@ -4,7 +4,10 @@ import HighlightedText from "../component/core/Homepage/HighlightedText";
 import CTAButton from "../component/core/Homepage/Button";
 import Banner from "../assets/Images/banner.mp4";
 import CodeBlocks from "../component/core/Homepage/CodeBlocks";
-
+import TimeLineSection from "../component/core/Homepage/TimeLineSection";
+import LearningLanguageSection from "../component/core/Homepage/LearningLanguageSection";
+import InstructorSection from "../component/core/Homepage/InstructorSection";
+import Footer from "../common/Footer";
 const Home = () => {
   return (
     <div>
@@ -130,15 +133,30 @@ const Home = () => {
                 be a competitive speacialist requires more than professional
                 skills
               </div>
-              <div><CTAButton active={true} linkto={"/login"}>
-                Learn More
-              </CTAButton></div>
+              <div>
+                <CTAButton active={true} linkto={"/login"}>
+                  Learn More
+                </CTAButton>
+              </div>
             </div>
           </div>
+          <TimeLineSection />
+          <LearningLanguageSection />
         </div>
       </div>
       {/* section 3 */}
+
+      <div className=" w-11/12 max-w-maxContent mx-auto flex flex-col items-center justify-between bg-richblack-900 text-white">
+        <InstructorSection />
+        <h2 className="text-3xl font-semibold text-center mt-10">
+          Review from other learner
+        </h2>
+        {/* review slide here */}
+      </div>
       {/* footer */}
+     <div className=" bg-richblack-800">
+     <Footer />
+     </div>
     </div>
   );
 };
