@@ -31,24 +31,31 @@ const TimeLineSection = () => {
 
   return (
     <div className="flex flex-row gap-5 items-center">
-      <div className=" w-[45%] flex flex-col gap-7">
+      <div className=" w-[45%] flex flex-col gap-3 ">
         {timeline.map((item, index) => {
           return (
-            <div key={index} className="flex flex-row gap-5">
+            <div key={index} className="flex flex-col gap-3">
+              <div className="flex gap-6">
               <div className="flex flex-row justify-center rounded-full shadow-xl  items-center w-[50px] h-[50px] bg-white ">
               <img src={item.Logo} alt="logo" />
               </div>
               <div className="flex flex-col text-left">
-                <p className="font-bold text-lg">{item.heading}</p>
-                <p >{item.description}</p>
+                <p className="font-bold text-[18px]">{item.heading}</p>
+                <p  className="text-base">{item.description}</p>
               </div>
+              </div>
+              <div
+                  className={`hidden ${
+                    timeline.length - 1 === index ? "hidden" : "lg:block"
+                  }  h-14 border-dotted border-r border-richblack-100 bg-richblack-400/0 w-[26px]`}
+                ></div>
             </div>
           );
         })}
       </div>
 
 
-      <div className="relative shadow-blue-500">
+      <div className="relative shadow-[-20px_-20px_20px_-10px_rgba(173,216,230,0.9)]">
         <img src={TimeLineImage} alt="TimeLineImage" 
         className="object-cover shadow-white h-fit"/>
 
