@@ -7,6 +7,7 @@ import CodeBlocks from "../component/core/Homepage/CodeBlocks";
 import TimeLineSection from "../component/core/Homepage/TimeLineSection";
 import LearningLanguageSection from "../component/core/Homepage/LearningLanguageSection";
 import InstructorSection from "../component/core/Homepage/InstructorSection";
+import Exploremore from "../component/core/Homepage/Exploremore";
 import Footer from "../common/Footer";
 const Home = () => {
   return (
@@ -100,6 +101,7 @@ const Home = () => {
             backgroundgradient={<div className="codeblock2 absolute"></div>}
           />
         </div>
+        <Exploremore />
       </div>
 
       {/* section 2 */}
@@ -107,7 +109,7 @@ const Home = () => {
         <div className="homepage_bg h-[333px]">
           <div className="w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-5 mx-auto">
             <div className="h-[145px]"></div>
-            <div className="flex gap-7 text-white">
+            <div className="flex gap-7 text-white mt-5">
               <CTAButton active={true} linkto={"/signup"}>
                 <div className="flex items-center gap-2">
                   Explore full catlog
@@ -154,9 +156,9 @@ const Home = () => {
         {/* review slide here */}
       </div>
       {/* footer */}
-     <div className=" bg-richblack-800">
-     <Footer />
-     </div>
+      <div className=" bg-richblack-800">
+        <Footer />
+      </div>
     </div>
   );
 };
