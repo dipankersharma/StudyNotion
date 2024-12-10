@@ -26,13 +26,13 @@ const Exploremore = () => {
 
   return (
     <div >
-      <div className="text-4xl font-semibold text-center">
+      <div className="text-4xl font-semibold text-center my-5">
         Unlock the <HighlightedText text={"power of code"} />
       </div>
-      <p className="text-richblack-300 text-center text-sm text-[16px] font-semibold mt-3">
+      <p className="text-richblack-300 text-center text-lg font-semibold mt-3">
         Learn to build anything you can imagine
       </p>
-      <div className="flex flex-row bg-richblack-800 gap-2 rounded-full border-richblack-100 py-1 px-2 mt-3">
+      <div className=" hidden lg:flex flex-row bg-richblack-800 gap-2 rounded-full border-richblack-100 py-1 px-2 mt-3">
         {Tabsname.map((item, index) => (
           <div
             key={index}
@@ -48,8 +48,8 @@ const Exploremore = () => {
         ))}
       </div>
 
-      <div className="lg:h-[150px]">
-      <div className="absolute left-0 flex flex-row w-full p-3 mt-8 justify-between ">
+      <div className="hidden lg:block lg:h-[150px]"></div>
+      <div className="lg:absolute justify-center flex flex-col lg:gap-0 lg:mt-5 gap-10 lg:flex-row flex-wrap w-full mt-8 lg:justify-between lg:bottom-[0] lg:left-[50%] lg:translate-x-[-50%] lg:translate-y-[60%] lg:mb-0 mb-7 lg:px-0 px-3  ">
         {course.map((ele, index) => {
           return (
             <CourseCard
@@ -60,7 +60,6 @@ const Exploremore = () => {
             />
           );
         })}
-      </div>
       </div>
     </div>
   );

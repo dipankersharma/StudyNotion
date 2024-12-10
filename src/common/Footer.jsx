@@ -20,8 +20,8 @@ const Footer = () => {
     <div className=" w-11/12 lg:flex-row max-w-maxContent mx-auto items-center justify-between flex flex-col mt-16 text-richblack-400 leading-6 py-14 relative">
       <div className="border-b w-[100%] flex flex-col lg:flex-row pb-5 border-richblack-700">
         {/* section-1 */}
-        <div className="flex flex-row w-[50%] gap-5  ">
-          <div className=" flex flex-col gap-3 w-[30%]">
+        <div className="flex flex-row flex-wrap pl-3 justify-between w-[50%] gap-5  ">
+          <div className=" flex lg:w-[30%] flex-col gap-3 w-[30%]">
             <img src={Logo} alt="Logo" className="object-contain" />
             <h1 className="font-semibold text-richblack-50 text-[16px] ">
               Company
@@ -46,7 +46,7 @@ const Footer = () => {
               <i class="ri-youtube-fill"></i>
             </div>
           </div>
-          <div className="flex flex-col gap-3 w-[30%] ml-2">
+          <div className="flex flex-col gap-3 w-[48%] lg:w-[30%] ml-2">
             <div className="flex flex-col gap-3 ">
               <h1 className="text-[16px] font-semibold text-richblack-100">
                 Resources
@@ -76,7 +76,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col ml-2 w-[30%]">
+          <div className="flex flex-col ml-2 w-[48%] lg:w-[30%]">
             <div className="flex flex-col gap-3 ">
               <h1 className="text-[16px] font-semibold text-richblack-100">
                 Plans
@@ -120,10 +120,10 @@ const Footer = () => {
 
         {/* section-2 */}
 
-        <div className="flex w-[50%] gap-5 border-l border-richblack-700 px-3">
+        <div className="flex w-[50%] flex-wrap gap-5 lg:border-l lg:border-richblack-700 px-3">
           {FooterLink2.map((elem, i) => {
             return (
-              <div key={i} className="flex flex-col gap-3 w-[30%] ml-2 mb-7">
+              <div key={i} className="flex flex-col gap-3 w-[48%] lg:w-[30%] ml-2 mb-7">
                 <div className="flex flex-col gap-3 ">
                   <h1 className="text-[16px] font-semibold text-richblack-100">
                     {elem.title}

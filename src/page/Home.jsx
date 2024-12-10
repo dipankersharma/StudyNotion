@@ -108,8 +108,8 @@ const Home = () => {
       <div className="bg-pure-greys-5 text-richblack-700">
         <div className="homepage_bg h-[333px]">
           <div className="w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-5 mx-auto">
-            <div className="h-[145px]"></div>
-            <div className="flex gap-7 text-white mt-5">
+            <div className="lg:h-[145px]"></div>
+            <div className="flex gap-7 text-white lg:mt-12">
               <CTAButton active={true} linkto={"/signup"}>
                 <div className="flex items-center gap-2">
                   Explore full catlog
@@ -124,12 +124,12 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col w-11/12 max-w-maxContent mx-auto gap-7 items-center justify-between">
-          <div className="flex gap-5 flex-row mt-[150px] mb-10">
-            <div className="w-[50%] text-4xl font-semibold">
+          <div className="flex gap-5 flex-col lg:flex-row mt-[-100px] lg:mt-20 mb-10">
+            <div className="lg:w-[50%] text-4xl font-semibold">
               Get the skills you need for a{" "}
               <HighlightedText text={"job that is in demand."} />
             </div>
-            <div className="w-[50%] flex flex-col gap-10 items-start ">
+            <div className="lg:w-[50%] flex flex-col gap-10 items-start ">
               <div className="text-[16px] text-richblack-700 font-semibold">
                 The modern StudyNotion is the dictates its own terms.Today, to
                 be a competitive speacialist requires more than professional
