@@ -18,7 +18,6 @@ const Navbar = () => {
 
   const fetchSubLinks = async () => {
     const result = await apiconnector("GET", categories.CATEGORIES_URL);
-    console.log("priting sublinks: ", result.data.data);
     setSubLinks(result.data.data);
   };
 
@@ -113,7 +112,7 @@ const Navbar = () => {
           {token !== null && <ProfileDashboard />}
         </div>
         <button className=" mr-4 md:hidden text-richblack-5 text-[24px] cursor-pointer">
-        <i class="ri-menu-line" ></i>
+          <i class="ri-menu-line"></i>
         </button>
       </div>
     </div>

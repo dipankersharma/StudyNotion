@@ -12,6 +12,7 @@ const {
   createCourse,
   getAllCourses,
   getCourseDetails,
+  editCourse,
 } = require("../controller/Course");
 const {
   createSection,
@@ -42,6 +43,7 @@ const {
 routes.post("/createCourse", authentication, isInstructor, createCourse);
 routes.get("/getallCourses", getAllCourses);
 routes.get("/getCourseDetails", getCourseDetails);
+routes.post("/editcourse", editCourse);
 
 // section routes
 routes.post("/createsection", authentication, isInstructor, createSection);
@@ -57,6 +59,7 @@ routes.post(
 );
 routes.put("/updatesubsection", updateSubSection);
 routes.delete("/deletesubsection", deleteSubsection);
+routes.post("/createsubsection", createSubSection);
 
 // rating and reviews routes
 routes.post("/createrating", authentication, isStudent, createRatingAndReviews);

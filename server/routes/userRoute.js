@@ -21,7 +21,7 @@ route.post("/login", login);
 // sendOtp routes
 route.post("/sendOtp", sendOtp);
 // changePassword routes
-route.post("/changePassword", authentication, changePassword);
+route.post("/changepassword", authentication, changePassword);
 // reset password routes
 
 route.post("/reset-password", resetPassword);

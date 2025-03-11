@@ -1,6 +1,53 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 // const mailSender = require("../utils/mailSender");
-const nodemailer = require("nodemailer");
+// const emailTemplate =
+//   require("../mails/templates/emailVerificationTemplate").default;
+
+// const otpSchema = new mongoose.Schema({
+//   email: {
+//     type: String,
+//     required: true,
+//   },
+//   otp: {
+//     type: String,
+//     required: true,
+//     minlength: 6,
+//     maxlength: 6,
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//     expires: 5 * 60,
+//   },
+// });
+
+// async function sendverificationEmail(email, otp) {
+//   try {
+//     const mailResponse = await mailSender(
+//       email,
+//       "Email verification",
+//       emailTemplate(otp)
+//     );
+//     console.log("email sent successfully: ", mailResponse.response);
+//   } catch (error) {
+//     console.log("Error occurred while sending email: ", error);
+//     throw error;
+//   }
+// }
+// otpSchema.pre("save", async (next) => {
+//   console.log("new Document is created");
+
+//   if (this.isNew) {
+//     await sendverificationEmail(this.email, this.otp);
+//   }
+//   next();
+// });
+
+// module.exports = mongoose.model("OTP", otpSchema);
+
+const mongoose = require("mongoose");
+const mailSender = require("../utils/mailSender");
+const emailTemplate = require("../mails/templates/emailVerificationTemplate");
 
 const otpSchema = new mongoose.Schema({
   email: {
@@ -16,32 +63,35 @@ const otpSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 5 * 60,
+    expires: 5 * 60, // 5 minutes expiration
   },
 });
-otpSchema.pre("save", async (next) => {
-  const otpDocument = this;
-  try {
-    // create Transporter
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD,
-      },
-    });
 
-    // send mail
-    let mail = await transporter.sendMail({
-      from: "dipankar.kr2005@gmail.com",
-      to: otpDocument.email,
-      subject:
-        "This is your OTP for sign up please fill this otp while signing up",
-      html: `<h1>This is your OTP for sign up ${otpDocument.otp}</h1>`,
-    });
-    console.log("email sent successfully....");
+// Function to send verification email
+async function sendverificationEmail(email, otp) {
+  try {
+    const mailResponse = await mailSender(
+      email,
+      "Email verification",
+      emailTemplate(otp)
+    );
+    console.log("Email sent successfully: ", mailResponse.messageId);
   } catch (error) {
-    console.error("Error sending email", error);
+    console.error("Error occurred while sending email: ", error.message);
+    throw error;
+  }
+}
+
+// Pre-save hook to send email
+otpSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    console.log("New OTP document is being created...");
+    try {
+      await sendverificationEmail(this.email, this.otp);
+    } catch (error) {
+      console.error("Error while sending verification email in pre-save hook");
+      next(error); // Pass the error to the next middleware
+    }
   }
   next();
 });

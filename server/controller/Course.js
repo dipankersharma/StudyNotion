@@ -8,29 +8,49 @@ const { cloudinaryUpload } = require("../utils/cloudinaryUpload");
 exports.createCourse = async (req, res) => {
   try {
     // fetch data
-    const { courseName, courseDescription, category, price, whatwillyoulearn } =
-      req.body;
+    const {
+      courseName,
+      courseDescription,
+      category,
+      price,
+      whatwillyoulearn,
+      tag: _tags,
+      instructions: _instructions,
+      state,
+    } = req.body;
+    const tag = JSON.parse(_tags);
+    const instructions = JSON.parse(_instructions);
 
+    console.log("tag", tag);
+    console.log("instructions", instructions);
     // fetch file
-    const thumbnail = req.files.imageFile;
+    const thumbnail = req.files.thumbnail;
+    console.log("thumbnail", thumbnail);
 
     // validation
     if (
-      !courseName ||
-      !courseDescription ||
-      !category ||
-      !price ||
-      !whatwillyoulearn ||
-      !thumbnail
+      (!courseName ||
+        !courseDescription ||
+        !category ||
+        !price ||
+        !whatwillyoulearn ||
+        !thumbnail ||
+        !tag.length ||
+        !instructions.length,
+      !state)
     ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
-
+    if (!state || state === undefined) {
+      state = "Draft";
+    }
     // check for instructor
-    const instructor = await User.findById(req.user.id);
+    const instructor = await User.findById(req.user.id, {
+      accountType: "instructor",
+    });
     console.log("Instructor : ", instructor);
     if (!instructor) {
       return res.status(404).json({
@@ -42,7 +62,7 @@ exports.createCourse = async (req, res) => {
     // TODO: HW - catrgory and tags updation
 
     // check for tags
-    const categoryExists = await Category.findOne({ name: category });
+    const categoryExists = await Category.findById(category);
     if (!categoryExists) {
       return res.status(404).json({
         success: false,
@@ -94,7 +114,75 @@ exports.createCourse = async (req, res) => {
     });
   }
 };
+// update courses
+exports.editCourse = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+    const updates = req.body;
 
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    // if thumbnail are available to update
+
+    if (updates.thumbnail) {
+      // upload image to cloudinary
+      const thumbnailDetails = await cloudinaryUpload(
+        updates.thumbnail,
+        process.env.FOLDER_NAME
+      );
+      updates.thumbnail = thumbnailDetails.secure_url;
+    }
+
+    for (var key in updates) {
+      if (updates.hasOwnProperty(key)) {
+        if (key === "tags" || key === "instructions") {
+          course[key] = JSON.parse(updates[key]);
+        } else {
+          course[key] = updates[key];
+        }
+      }
+    }
+
+    await course.save();
+    const updateCourse = await Course.findOne({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseSections",
+        populate: {
+          path: "sectionName",
+        },
+      })
+      .exec();
+
+    return res.status(200).json({
+      success: true,
+      message: "Course updated successfully",
+      data: updateCourse,
+    });
+  } catch (error) {
+    console.error("Error in updating course", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error while updating course",
+      error: error.message,
+    });
+  }
+};
 // getall courses
 exports.getAllCourses = async (req, res) => {
   try {

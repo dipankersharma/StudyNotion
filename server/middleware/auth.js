@@ -12,6 +12,8 @@ exports.authentication = (req, res, next) => {
       req.body.token ||
       req.header("Authorization").replace("Bearer ", "");
 
+    console.log(token);
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -22,11 +24,12 @@ exports.authentication = (req, res, next) => {
     // verify token
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded);
       req.user = decoded;
     } catch (error) {
       return res.status(401).json({
         success: false,
-        message: "Token is invalid or expired",
+        message: error.message,
       });
     }
     next();
