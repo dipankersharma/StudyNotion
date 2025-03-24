@@ -13,6 +13,8 @@ const {
   getAllCourses,
   getCourseDetails,
   editCourse,
+  getInstructorCourses,
+  deleteCourse,
 } = require("../controller/Course");
 const {
   createSection,
@@ -42,8 +44,11 @@ const {
 
 routes.post("/createCourse", authentication, isInstructor, createCourse);
 routes.get("/getallCourses", getAllCourses);
-routes.get("/getCourseDetails", getCourseDetails);
-routes.post("/editcourse", editCourse);
+routes.post("/getCourseDetails", getCourseDetails);
+routes.put("/editcourse", editCourse);
+routes.delete("/deletecourse", deleteCourse);
+routes.get("/getinstructorcourses",authentication, getInstructorCourses);
+
 
 // section routes
 routes.post("/createsection", authentication, isInstructor, createSection);

@@ -41,15 +41,16 @@ const CourseInformationForm = () => {
     }
     setloading(false);
   };
+
   const isUpdateDetail = () => {
     const currentValue = getValues();
     if (
       currentValue.courseTitle !== course.courseName ||
       currentValue.courseShortDesc !== course.courseDescription ||
-      currentValue.Price !== course.coursePrice ||
+      currentValue.coursePrice !== course.price ||
       currentValue.courseBenefits !== course.whatYouWillLearn ||
       currentValue.courseImage !== course.thumbnail ||
-      currentValue.courseTags.toString() !== course.tag ||
+      currentValue.courseTags.toString() !== course.tag.toString() ||
       currentValue.courseRequirements.toString() !==
         course.instructions.toString() ||
       currentValue.courseCategory !== course.category.toString()
@@ -66,19 +67,19 @@ const CourseInformationForm = () => {
       setValue("courseTitle", course.courseName);
       setValue("courseShortDesc", course.courseDescription);
       setValue("coursePrice", course.price);
-      setValue("courseTags", course.tag);
-      setValue("courseBenefits", course.whatYouWillLearn);
+      setValue("courseTags", course.tags);
+      setValue("courseBenefits", course.whatwillyoulearn);
       setValue("courseCategory", course.category);
       setValue("courseRequirements", course.instructions);
       setValue("courseImage", course.thumbnail);
     }
     getCategories();
-  }, []);
+  }, [editCourse, course, setValue]);
 
   const onSubmit = async (data) => {
     console.log(data);
     if (editCourse) {
-      if (isUpdateDetail) {
+      if (isUpdateDetail()) {
         const currentValue = getValues();
         const formData = new FormData();
         formData.append("courseId", course._id);
@@ -91,14 +92,14 @@ const CourseInformationForm = () => {
         if (currentValue.coursePrice !== course.price) {
           formData.append("price", data.coursePrice);
         }
-        if (currentValue.courseBenefits !== course.whatYouWillLearn) {
+        if (currentValue.courseBenefits !== course.whatwillyoulearn) {
           formData.append("whatYouWillLearn", data.courseBenefits);
         }
         if (currentValue.courseImage !== course.thumbnail) {
           formData.append("thumbnail", data.courseImage);
         }
-        if (currentValue.courseTags.toString() !== course.tag.toString()) {
-          formData.append("tag", JSON.stringify(data.courseTags));
+        if (currentValue.courseTags.toString() !== course.tags.toString()) {
+          formData.append("tags", JSON.stringify(data.courseTags));
         }
         if (
           currentValue.courseRequirements.toString() !==
@@ -123,19 +124,23 @@ const CourseInformationForm = () => {
       return;
     } else {
       const formData = new FormData();
+      console.log(JSON.stringify(data.courseTags));
+      console.log(JSON.stringify(data.courseRequirements));
+      
 
       formData.append("courseName", data.courseTitle);
       formData.append("courseDescription", data.courseShortDesc);
       formData.append("price", data.coursePrice);
       formData.append("whatwillyoulearn", data.courseBenefits);
       formData.append("thumbnail", data.courseImage);
-      formData.append("tag", JSON.stringify(data.courseTags));
+      formData.append("tags", JSON.stringify(data.courseTags));
       formData.append("instructions", JSON.stringify(data.courseRequirements));
       formData.append("category", data.courseCategory);
-      formData.append("state",COURSE_STATUS.DRAFT );
+      formData.append("state", COURSE_STATUS.DRAFT);
+    
+
 
       setloading(true);
-      console.log(formData);
       const result = await createCourse(token, formData);
 
       if (result) {
@@ -145,6 +150,7 @@ const CourseInformationForm = () => {
       setloading(false);
     }
   };
+
   return (
     <form
       className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"
@@ -164,7 +170,7 @@ const CourseInformationForm = () => {
             boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
           }}
         />
-        {errors.courseTitle && <span>Course title is require</span>}
+        {errors.courseTitle && <span>Course title is required</span>}
       </div>
       <div className=" flex flex-col space-y-2">
         <label htmlFor="courseShortDesc" className="text-sm text-richblack-5">
@@ -180,7 +186,7 @@ const CourseInformationForm = () => {
           }}
         />
         {errors.courseShortDesc && (
-          <span>Course short Description is required</span>
+          <span>Course short description is required</span>
         )}
       </div>
       <div className=" flex flex-col space-y-2 relative">
@@ -197,9 +203,8 @@ const CourseInformationForm = () => {
             boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
           }}
         />
-
-        {errors.coursePrice && <span>Course Price is require</span>}
-        <i class="ri-money-rupee-circle-fill absolute text-richblack-400 text-2xl top-[28px] left-[5px]"></i>
+        {errors.coursePrice && <span>Course price is required</span>}
+        <i className="ri-money-rupee-circle-fill absolute text-richblack-400 text-2xl top-[28px] left-[5px]"></i>
       </div>
       <div className="flex flex-col space-y-2">
         <label htmlFor="courseCategory" className="text-sm text-richblack-5">
@@ -215,7 +220,6 @@ const CourseInformationForm = () => {
             boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
           }}
         >
-          {" "}
           <option value=" " disabled>
             Choose a Category
           </option>
@@ -226,7 +230,7 @@ const CourseInformationForm = () => {
               </option>
             ))}
         </select>
-        {errors.courseCategory && <span>Course Category is require</span>}
+        {errors.courseCategory && <span>Course category is required</span>}
       </div>
 
       <Chipinput
@@ -262,7 +266,7 @@ const CourseInformationForm = () => {
             boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
           }}
         />
-        {errors.courseBenefits && <span>Course Benefits is required</span>}
+        {errors.courseBenefits && <span>Course benefits are required</span>}
       </div>
 
       <RequirementFields
@@ -282,12 +286,12 @@ const CourseInformationForm = () => {
             disabled={loading}
             className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
           >
-            Continue Wihout Saving
+            Continue Without Saving
           </button>
         )}
         <button className="bg-yellow-50 text-richblack-800 rounded-lg py-2 px- font-semibold">
           {!editCourse ? "Next" : "Save changes"}{" "}
-          <i class="ri-arrow-right-s-line"></i>
+          <i className="ri-arrow-right-s-line"></i>
         </button>
       </div>
     </form>

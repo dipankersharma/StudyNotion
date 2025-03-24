@@ -11,41 +11,40 @@ const Chipinput = ({
   errors,
 }) => {
   const [chips, setChips] = useState([]);
-  const { editCourse } = useSelector((state) => state.course);
+  const { editCourse, course } = useSelector((state) => state.course);
+  // console.log("Course",course);
+  // console.log(chips);
 
   const handleAddChips = (event) => {
-    // Check if user presses "Enter" or ","
     if (event.key === "Enter" || event.key === ",") {
-      // Prevent the default behavior of the event
       event.preventDefault();
-      // Get the input value and remove any leading/trailing spaces
       const chipValue = event.target.value.trim();
-      // Check if the input value exists and is not already in the chips array
       if (chipValue && !chips.includes(chipValue)) {
-        // Add the chip value to the chips array
         const newChip = [...chips, chipValue];
+        console.log("Chip",newChip);
         setChips(newChip);
-        // Clear the input value
         event.target.value = "";
       }
     }
   };
+
   const handleRemoveChip = (chipValue) => {
-    // Filter out the chip value from the chips array
     const newChips = chips.filter((chip) => chip !== chipValue);
     setChips(newChips);
   };
+
   useEffect(() => {
-    if (editCourse) {
-      // console.log(course)
-      setChips(course?.tag);
+    console.log(course.tags)
+    if (editCourse && course?.tags) {
+      setChips(course.tags);
     }
     register(name, { required: true, validate: (value) => value.length > 0 });
-  }, []);
+  }, [editCourse, course, name, register]);
+
   useEffect(() => {
     setValue(name, chips);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chips]);
+    // console.log("get values",getValues(name))
+  }, [chips, name, setValue]);
 
   return (
     <div className="flex flex-col space-y-2">
@@ -54,31 +53,30 @@ const Chipinput = ({
         <sup className="text-pink-200">*</sup>
       </label>
       <div className="flex w-full flex-wrap gap-y-2">
-        {/* Map over the chips array and render each chip */}
         {chips.map((chip, index) => (
           <div
             key={index}
             className="m-1 flex items-center rounded-full bg-yellow-400 px-2 py-1 text-sm text-richblack-5"
           >
-            {/* Render the chip value */}
             {chip}
-            {/* Render the button to delete the chip */}
             <button type="button" onClick={() => handleRemoveChip(chip)}>
-              <i class="ri-close-line "></i>
+              <i className="ri-close-line"></i>
             </button>
           </div>
         ))}
-        {/* Render the input for adding new chips */}
         <input
           id={name}
           name={name}
           type="text"
           placeholder={placeholder}
           onKeyDown={handleAddChips}
-          className=" w-full text-richblack-5 bg-richblack-700 p-[12px] rounded-lg"
-          style={{ boxShadow: "inset 0px -1px 0 rgba(255,255,255,0.18" }}
+          className="w-full text-richblack-5 bg-richblack-700 p-[12px] rounded-lg"
+          style={{ boxShadow: "inset 0px -1px 0 rgba(255,255,255,0.18)" }}
         />
       </div>
+      {errors[name] && (
+        <span className="text-red-500 text-sm">{errors[name].message}</span>
+      )}
     </div>
   );
 };

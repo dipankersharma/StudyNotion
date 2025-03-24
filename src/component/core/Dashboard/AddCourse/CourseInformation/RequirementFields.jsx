@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const RequirementFields = ({
   label,
   name,
   register,
   errors,
-  getvalue,
+  getValues,
   setValue,
   placeholder,
 }) => {
   const [Requirement, setRequirement] = useState("");
   const [requirementList, setRequirementList] = useState([]);
+  const { editCourse, course } = useSelector((state) => state.course);
 
   const handleAddRequirement = () => {
     if (Requirement) {
@@ -18,17 +20,25 @@ const RequirementFields = ({
       setRequirement("");
     }
   };
+
   useEffect(() => {
+    console.log(course?.instructions);
+    if (editCourse && course?.instructions) {
+      setRequirementList(course.instructions);
+    }
     register(name, { required: true, validate: (value) => value.length > 0 });
-  });
+  }, [editCourse, course, name, register]);
+
   useEffect(() => {
     setValue(name, requirementList);
-  });
+  }, [requirementList, name, setValue]);
+
   const handleRemoveRequirement = (index) => {
     const updatedRequirementList = [...requirementList];
     updatedRequirementList.splice(index, 1);
     setRequirementList(updatedRequirementList);
   };
+
   return (
     <div className="flex flex-col space-y-2">
       <label className="text-sm text-richblack-5" htmlFor={name}>
@@ -60,7 +70,7 @@ const RequirementFields = ({
               <span>{item}</span>
               <button
                 type="button"
-                onClick={handleRemoveRequirement}
+                onClick={() => handleRemoveRequirement(index)}
                 className="ml-2 text-xs text-pure-greys-300 "
               >
                 Clear

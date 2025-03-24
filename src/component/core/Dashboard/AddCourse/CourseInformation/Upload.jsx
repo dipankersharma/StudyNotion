@@ -86,6 +86,7 @@ const Upload = ({
           <div
             className="flex w-full flex-col items-center p-6"
             {...getRootProps()}
+            onClick={() => inputRef.current.click()}
           >
             <input {...getInputProps()} ref={inputRef} />
             <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">

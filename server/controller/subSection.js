@@ -35,7 +35,7 @@ exports.createSubSection = async (req, res) => {
     // create subsection
     const subSection = await SubSection.create({
       title: title,
-      videoDuration: `${uploadVideo.duration}`,
+      videoDuration: `${uploadVideo.videoDuration}`,
       description: description,
       videoLink: uploadVideo.secure_url,
     });
@@ -69,23 +69,29 @@ exports.updateSubSection = async (req, res) => {
     const { sectionId, subSectionId, title, description } = req.body;
     const video = req.files?.videoLink;
     console.log(video, sectionId, subSectionId, title, description);
+
     // validate data
-    if (!subSectionId || !title || !description || !sectionId || !video) {
+    if (!subSectionId || !title || !description || !sectionId) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
+
     // update subsection
     const subSection = await SubSection.findById(subSectionId);
+    let uploadVideo = null;
+
     if (video) {
       // upload video file
-      const uploadVideo = await cloudinaryUpload(video, "studyNotion");
+      uploadVideo = await cloudinaryUpload(video, "studyNotion");
+      console.log(uploadVideo);
       subSection.videoLink = uploadVideo.secure_url;
+      subSection.videoDuration = `${uploadVideo.duration}`;
     }
+
     subSection.title = title;
     subSection.description = description;
-    subSection.videoDuration = `${uploadVideo.duration}`;
     await subSection.save();
 
     const updatedSection = await Section.findById(sectionId)

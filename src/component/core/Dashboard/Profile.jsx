@@ -6,8 +6,6 @@ const Profile = () => {
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
 
-  console.log(user.additionalDetails.about);
-
   return (
     <div className="w-11/12 mx-auto ">
       <h1 className="text-richblack-5 font-semibold text-2xl">My Profile</h1>

@@ -22,7 +22,7 @@ export const fetchCourseCategories = async () => {
   return result;
 };
 
-export const editCourseDetails = (token, formData) => async () => {
+export const editCourseDetails = async (token, formData) => {
   let result = null;
   const toastId = toast.loading("loading...");
   try {
@@ -32,18 +32,18 @@ export const editCourseDetails = (token, formData) => async () => {
       formData,
       null,
       {
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("EDIT_COURSE_DETAILS_API API RESPONSE............", response);
+    // console.log("EDIT_COURSE_DETAILS_API API RESPONSE............", response);
     if (!response?.data?.success) {
-      throw new Error("Could Not Add Course Details");
+      throw new Error("Could Not update Course Details");
     }
-    toast.success("Course Details Added Successfully");
+    toast.success("Course Details updated Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("CREATE COURSE API ERROR............", error);
+    console.log("EDIT_COURSE_DETAILS_API API ERROR............", error);
     toast.error(error.message);
   }
   toast.dismiss(toastId);
@@ -63,7 +63,7 @@ export const createCourse = async (token, formData) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("CREATE COURSE API RESPONSE............", response);
+    // console.log("CREATE COURSE API RESPONSE............", response);
 
     if (!response?.data?.success) {
       throw new Error("Could Not Add Course");
@@ -90,6 +90,84 @@ export const createCourse = async (token, formData) => {
   toast.dismiss(toastId);
   return result;
 };
+export const deleteCourse = async (token, _id) => {
+  console.log("courseDetailwala: ", _id);
+  const toastId = toast.loading("loading...");
+  try {
+    const response = await apiconnector(
+      "DELETE",
+      courseEndpoint.DELETE_COURSE,
+      { _id },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    // console.log("DELETE COURSE API RESPONSE............", response);
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    toast.success("Course Deleted Successfully");
+  } catch (error) {
+    console.log("DELETE COURSE API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+};
+
+export const getCourseDetails = async (token, _id) => {
+  const toastId = toast.loading("loading...");
+  let result = null;
+  try {
+    const response = await apiconnector(
+      "POST",
+      courseEndpoint.FETCH_COURSE_DETAILS,
+      { _id: _id },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    // console.log("GET COURSE DETAILS API RESPONSE............", response);
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    result = response?.data?.data;
+    // toast.success("Course Details fetched successfully");
+
+    return result;
+  } catch (error) {
+    console.log("GET COURSE DETAILS API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+};
+
+export const getinstructorcourses = async (token) => {
+  const toastId = toast.loading("loading...");
+  let result = [];
+  try {
+    const response = await apiconnector(
+      "GET",
+      courseEndpoint.GET_INSTRUCTOR_COURSES,
+      "",
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    // console.log("CREATE_SECTION_API RESPONSE............", response);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    result = response?.data?.data;
+    toast.success("Instructor Courses fetched successfully");
+  } catch (error) {
+    console.log("FETCHING INSTRUCTOR COURSES API ERROR...", error);
+    toast.error("Could Not Fetch Instructor Courses");
+  }
+  toast.dismiss(toastId);
+  return result;
+};
 
 // backend calls for sections
 export const createSection = async (data, token) => {
@@ -106,7 +184,7 @@ export const createSection = async (data, token) => {
       }
     );
 
-    console.log("CREATE_SECTION_API RESPONSE............", response);
+    // console.log("CREATE_SECTION_API RESPONSE............", response);
 
     if (!response?.data?.success) {
       throw new Error("Could Not Add Section");
@@ -134,7 +212,7 @@ export const updateSection = async (data, token) => {
         AuthoriZation: `Bearer ${token}`,
       }
     );
-    console.log("UPDATE_SECTION_API RESPONSE............", response);
+    // console.log("UPDATE_SECTION_API RESPONSE............", response);
     if (response?.data?.success !== true) {
       throw new Error("Could Not Update Section");
     }
@@ -161,7 +239,7 @@ export const deleteSection = async (data, token) => {
         AuthoriZation: `Bearer ${token}`,
       }
     );
-    console.log("DELETE_SECTION_API RESPONSE............", response);
+    // console.log("DELETE_SECTION_API RESPONSE............", response);
     if (response?.data?.success !== true) {
       throw new Error("Could Not Delete Section");
     }
@@ -192,7 +270,7 @@ export const createSubSection = async (formData, token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("CREATE_SUBSECTION_API RESPONSE............", response);
+    // console.log("CREATE_SUBSECTION_API RESPONSE............", response);
     if (!response?.data?.success) {
       throw new Error("Could Not Add Subsection");
     }
@@ -218,7 +296,7 @@ export const updateSubSection = async (data, token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("UPDATE_SUBSECTION_API RESPONSE............", response);
+    // console.log("UPDATE_SUBSECTION_API RESPONSE............", response);
     if (response?.data?.success !== true) {
       throw new Error("Could Not Update Subsection");
     }
@@ -244,7 +322,7 @@ export const deleteSubSection = async (data, token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("DELETE_SUBSECTION_API RESPONSE............", response);
+    // console.log("DELETE_SUBSECTION_API RESPONSE............", response);
     if (!response?.data?.success) {
       throw new Error("Could Not Delete Subsection");
     }

@@ -3,16 +3,51 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 // Authentication
+// exports.authentication = (req, res, next) => {
+//   try {
+//     // fetch token
+
+//     const token =
+//       req.cookies.token ||
+//       req.body.token ||
+//       req.header("Authorization").replace("Bearer ", "");
+
+//     console.log(token);
+
+//     if (!token) {
+//       return res.status(401).json({
+//         success: false,
+//         message: "Token is not provided",
+//       });
+//     }
+
+//     // verify token
+//     try {
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       console.log(decoded);
+//       req.user = decoded;
+//     } catch (error) {
+//       return res.status(401).json({
+//         success: false,
+//         message: error.message,
+//       });
+//     }
+//     next();
+//   } catch (error) {
+//     return res.status(401).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 exports.authentication = (req, res, next) => {
   try {
-    // fetch token
-
     const token =
       req.cookies.token ||
       req.body.token ||
-      req.header("Authorization").replace("Bearer ", "");
+      req.header("Authorization")?.replace("Bearer ", "");
 
-    console.log(token);
+    // console.log("Extracted Token:", token);
 
     if (!token) {
       return res.status(401).json({
@@ -21,18 +56,26 @@ exports.authentication = (req, res, next) => {
       });
     }
 
-    // verify token
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded);
-      req.user = decoded;
+      // console.log("Decoded User:", decoded);
+
+      if (!decoded?.id) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid Token: ID missing",
+        });
+      }
+
+      req.user = decoded; // ✅ Only assign if valid
+      next();
     } catch (error) {
+      console.error("JWT Verification Error:", error.message);
       return res.status(401).json({
         success: false,
         message: error.message,
       });
     }
-    next();
   } catch (error) {
     return res.status(401).json({
       success: false,
@@ -40,6 +83,7 @@ exports.authentication = (req, res, next) => {
     });
   }
 };
+
 
 // isStudent
 

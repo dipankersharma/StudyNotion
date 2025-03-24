@@ -33,25 +33,23 @@ const CourseBuilder = () => {
     setValue("courseSections", "");
     setEditSectionName(false);
   };
+
   const goBack = () => {
     dispatch(setStep(1));
     dispatch(setEditCourse(true));
   };
+
   const goToNext = () => {
     console.log("Go to next");
     console.log("Course: ", course);
-    console.log("CourseSections: ", course.courseSections.length);
+    console.log("CourseSections: ", course?.courseSections?.length);
 
-
-
-
-
-    if ( course.courseSections.length === 0) {
+    if (!course?.courseSections || course.courseSections.length === 0) {
       toast.error("Please add at least one course Section");
       return;
     }
     if (
-      course.courseSections.some((Section) => Section.subSection?.length === 0)
+      course.courseSections.some((Section) => Section.subSections?.length === 0)
     ) {
       toast.error("Please add at least one lecture to each course section");
       return;
@@ -100,6 +98,7 @@ const CourseBuilder = () => {
 
     setValue("sectionName", sectionName);
   };
+
   return (
     <div className="flex flex-col bg-richblack-800 p-6 space-y-8 rounded-md border-[1px] border-richblack-700 rounded-lg">
       <p className="text-richblack-5 text-xl font-semibold">Course Builder</p>
@@ -118,7 +117,11 @@ const CourseBuilder = () => {
             }}
             className="rounded-lg w-full bg-richblack-700 text-richblack-5 p-[12px] mt-1"
           />
-          {}
+          {errors.courseSections && (
+            <span className="text-red-500 text-sm">
+              Section name is required
+            </span>
+          )}
         </div>
         <div className="flex gap-3 mt-5">
           <button
@@ -126,7 +129,7 @@ const CourseBuilder = () => {
             className="text-yellow-50 border-[1px] py-2 px-4 border-yellow-50 rounded-lg"
           >
             {editSectionName ? "Edit Section Name" : "Create Section"}
-            <i class="ri-add-circle-fill text-yellow-50 ml-2"></i>
+            <i className="ri-add-circle-fill text-yellow-50 ml-2"></i>
           </button>
 
           {editSectionName && (
@@ -140,9 +143,9 @@ const CourseBuilder = () => {
           )}
         </div>
       </form>
-      {course.courseSections.length > 0 && (
+      {course?.courseSections?.length > 0 && (
         <>
-          <NestedView handleEditSectionName={handleEditSectionName} />{" "}
+          <NestedView handleEditSectionName={handleEditSectionName} />
           <div className="flex items-center gap-5 justify-end">
             <button
               type="button"

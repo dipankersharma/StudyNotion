@@ -69,6 +69,11 @@ const SubSectionModal = ({
     const result = await updateSubSection(formData, token);
     setLoading(false);
     if (result) {
+      const updatedCourseContent = course.courseContent.map((section) =>
+        section._id === modalData.sectionId ? result : section
+      )
+      const updatedCourse = { ...course, courseContent: updatedCourseContent }
+      dispatch(setCourse(updatedCourse))
       setModalData(null);
       dispatch(setCourse(result));
     }
