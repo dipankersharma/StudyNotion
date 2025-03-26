@@ -16,6 +16,8 @@ const Navbar = () => {
 
   const [subLinks, setSubLinks] = useState([]);
 
+
+
   const fetchSubLinks = async () => {
     const result = await apiconnector("GET", categories.CATEGORIES_URL);
     setSubLinks(result.data.data);
@@ -29,6 +31,8 @@ const Navbar = () => {
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   };
+
+  
   return (
     <div className="flex justify-center items-center border-b-[1px] border-richblack-700 h-14">
       <div className="w-11/12 max-w-maxContent mx-auto flex items-center justify-between">
