@@ -34,9 +34,8 @@ const Chipinput = ({
   };
 
   useEffect(() => {
-    console.log(course.tags)
     if (editCourse && course?.tags) {
-      setChips(course.tags);
+      setChips(course?.tags);
     }
     register(name, { required: true, validate: (value) => value.length > 0 });
   }, [editCourse, course, name, register]);
