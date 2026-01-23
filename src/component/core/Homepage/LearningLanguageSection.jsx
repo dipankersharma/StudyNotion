@@ -1,6 +1,6 @@
 import React from "react";
 import HighlightedText from "../Homepage/HighlightedText";
-import know_your_progress from "../../../assets/Images/know_your_progress.png";
+import know_your_progress from "../../../assets/Images/Know_your_progress.png";
 import Compare_with_others from "../../../assets/Images/Compare_with_others.png";
 import Plan_your_lessons from "../../../assets/Images/Plan_your_lessons.png";
 import CTAbutton from "../Homepage/Button"
