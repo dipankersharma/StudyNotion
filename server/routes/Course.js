@@ -15,6 +15,7 @@ const {
   editCourse,
   getInstructorCourses,
   deleteCourse,
+  getFullCourseDetails,
 } = require("../controller/Course");
 const {
   createSection,
@@ -40,6 +41,7 @@ const {
   getAllcategories,
   getCategoryDetails,
 } = require("../controller/Category");
+const { courseProgress } = require("../controller/CourseProgress");
 // Course routes
 
 routes.post("/createCourse", authentication, isInstructor, createCourse);
@@ -47,8 +49,9 @@ routes.get("/getallCourses", getAllCourses);
 routes.post("/getCourseDetails", getCourseDetails);
 routes.put("/editcourse", editCourse);
 routes.delete("/deletecourse", deleteCourse);
-routes.get("/getinstructorcourses",authentication, getInstructorCourses);
-
+routes.get("/getinstructorcourses", authentication, getInstructorCourses);
+routes.post("/getfullcoursedetails", authentication, getFullCourseDetails);
+routes.post("/updateCourseProgress", authentication, isStudent, courseProgress);
 
 // section routes
 routes.post("/createsection", authentication, isInstructor, createSection);
@@ -76,6 +79,6 @@ routes.get("/courseratingandreviews", courseRatingAndReviews);
 
 routes.post("/createcategory", authentication, isAdmin, createCategory);
 routes.get("/getallcategories", getAllcategories);
-routes.get("/getcategoriespagedetails", getCategoryDetails);
+routes.post("/getcategoriespagedetails", getCategoryDetails);
 
 module.exports = routes;

@@ -6,13 +6,14 @@ const User = require("../model/user");
 exports.createRatingAndReviews = async (req, res) => {
   try {
     // fetch data
-    const { rating, review, _id } = req.body;
+    const { rating, review, courseId } = req.body;
+    console.log(rating,review,courseId)
     // const { id } = req.params;
 
     const userID = req.user.id;
 
     // validate data
-    if (!rating || !review || !_id || !userID) {
+    if (!rating || !review || !courseId || !userID) {
       return res.status(400).json({
         success: false,
         message: "Rating, review, userId and course id are required",
@@ -21,7 +22,7 @@ exports.createRatingAndReviews = async (req, res) => {
 
     // find course by id
     const courseDetails = await Course.findById({
-      _id,
+      _id:courseId,
       studentsEnroll: { $elemMatch: { $eq: userID } },
     });
     if (!courseDetails) {
@@ -42,7 +43,7 @@ exports.createRatingAndReviews = async (req, res) => {
     // check is user already reviewed course
     const existingReview = await ratingAndReviews.findOne({
       user: userID,
-      course: _id,
+      course: courseId,
     });
     if (existingReview) {
       return res.status(400).json({
@@ -55,12 +56,13 @@ exports.createRatingAndReviews = async (req, res) => {
     const newRatingAndReview = await ratingAndReviews.create({
       rating,
       review,
+      course: courseId,
       user: userDetails._id,
     });
 
     // add rating and review to course
     await Course.findByIdAndUpdate(
-      _id,
+       courseId,
       { $push: { ratingAndreviews: newRatingAndReview._id } },
       { new: true }
     );
@@ -173,7 +175,7 @@ exports.getAllRatingAndReviews = async (req, res) => {
         message: "No rating and reviews found",
       });
     }
-
+    console.log("Rating and Reviews", ratingReview);
     return res.status(200).json({
       success: true,
       message: "All rating and reviews fetched successfully",

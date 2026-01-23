@@ -65,14 +65,20 @@ exports.getAllcategories = async (req, res) => {
 
 exports.getCategoryDetails = async (req, res) => {
   try {
-    const { categoryId } = req.params;
-    // const _id = req.body;
+    // Extract categoryId from the request body
+    const { categoryId } = req.body;
+
+    // Validate categoryId
+    if (!categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Category ID is required",
+      });
+    }
+
+    // Find the category by ID
     const category = await Category.findById(categoryId)
-      .populate({
-        path: "courses",
-        match: { state: "published" },
-        populate: "ratingAndReviews",
-      })
+      .populate("courses")
       .exec();
     if (!category) {
       return res.status(404).json({
@@ -90,40 +96,48 @@ exports.getCategoryDetails = async (req, res) => {
       });
     }
 
-    // find courses for different categories
+    // Find courses for different categories
     const differentCategory = await Category.find({ _id: { $ne: categoryId } })
       .populate("courses")
       .exec();
+    // console.log("differentCategory", differentCategory);
+    const randomCategory =
+      differentCategory.length > 0
+        ? await Category.findById(
+            differentCategory[getRandomInt(differentCategory.length)]._id
+          )
+            .populate("courses")
+            .exec()
+        : null;
 
-    const randomCategory = await Category.findOne(
-      differentCategory[getRandomInt(differentCategory.length)]._id
-    ).populate({
-      path: "courses",
-      match: { status: "Published" },
-    });
-
+    // console.log("randomCategory", randomCategory);
     if (!randomCategory) {
       return res.status(404).json({
         success: false,
         message: "No different category found",
       });
     }
+
     // Get top-selling courses across all categories
     const allCategories = await Category.find()
       .populate({
         path: "courses",
-        match: { status: "Published" },
         populate: {
-          path: "instructor",
+          path: "courseInstructor",
         },
       })
       .exec();
+  
+
     const allCourses = allCategories.flatMap((category) => category.courses);
+  
     const mostSellingCourses = allCourses
       .sort((a, b) => b.sold - a.sold)
       .slice(0, 10);
-    // console.log("mostSellingCourses COURSE", mostSellingCourses)
-    res.status(200).json({
+  
+
+    // Return response
+    return res.status(200).json({
       success: true,
       data: {
         category,

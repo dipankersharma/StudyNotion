@@ -40,9 +40,10 @@ const cartSlice = createSlice({
       const courseId = action.payload;
       const index = state.cart.findIndex((item) => item._id === courseId);
 
-      if (index > 0) {
-        state.total -= state.cart[index].price;
+      if (index >= 0) {
         state.totalItems--;
+        state.total -= state.cart[index].price;
+
         state.cart.splice(index, 1);
         // update local storage
         localStorage.setItem("cart", JSON.stringify(state.cart));

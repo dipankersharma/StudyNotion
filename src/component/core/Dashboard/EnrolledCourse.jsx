@@ -7,7 +7,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 const EnrolledCourse = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  const [enrolledcourse, setEnrolledCourse] = useState(null);
+  const [enrolledcourse, setEnrolledCourse] = useState([]);
   const fetchEnrolledCourse = async () => {
     try {
       const result = await enrolledCourses(token);
@@ -40,10 +40,10 @@ const EnrolledCourse = () => {
             <p className="w-1/4 px-2 py-3">Duration</p>
             <p className="flex-1 px-2 py-3">Progress</p>
           </div>
-          {enrolledcourse.map((course, index, arr) => {
+          {enrolledcourse.map((course, index, arr) => (
             <div
               className={`flex items-center border border-richblack-700 ${
-                i === arr.length - 1 ? "rounded-b-lg" : "rounded-none"
+                course === arr.length - 1 ? "rounded-b-lg" : "rounded-none"
               }`}
               key={index}
             >
@@ -51,7 +51,7 @@ const EnrolledCourse = () => {
                 className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3"
                 onClick={() => {
                   navigate(
-                    `/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`
+                    `/view-course/${course?._id}/section/${course.courseSections?.[0]?._id}/sub-section/${course.courseSections?.[0]?.subSections?.[0]?._id}`
                   );
                 }}
               >
@@ -82,8 +82,8 @@ const EnrolledCourse = () => {
                   isLabelVisible={false}
                 />
               </div>
-            </div>;
-          })}
+            </div>
+          ))}
         </div>
       )}
     </>

@@ -15,6 +15,7 @@ export const Sendotp = (email, navigate) => async (dispatch) => {
       email,
       userExits: true,
     });
+    console.log(response);
 
     if (!response.data.success) {
       throw new Error(response.data.message);

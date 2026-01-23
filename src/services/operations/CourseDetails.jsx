@@ -114,23 +114,20 @@ export const deleteCourse = async (token, _id) => {
   toast.dismiss(toastId);
 };
 
-export const getCourseDetails = async (token, _id) => {
+export const getCourseDetails = async (_id) => {
   const toastId = toast.loading("loading...");
   let result = null;
   try {
     const response = await apiconnector(
       "POST",
       courseEndpoint.FETCH_COURSE_DETAILS,
-      { _id: _id },
-      {
-        Authorization: `Bearer ${token}`,
-      }
+      { _id: _id }
     );
-    // console.log("GET COURSE DETAILS API RESPONSE............", response);
+    console.log("GET COURSE DETAILS API RESPONSE............", response);
     if (!response.data.success) {
       throw new Error(response.data.message);
     }
-    result = response?.data?.data;
+    result = response?.data;
     // toast.success("Course Details fetched successfully");
 
     return result;
@@ -139,6 +136,30 @@ export const getCourseDetails = async (token, _id) => {
     toast.error(error.message);
   }
   toast.dismiss(toastId);
+};
+
+export const getFullDetails = async (courseid, token) => {
+  const toastId = toast.loading("loading...");
+  let result = null;
+  try {
+    const response = await apiconnector(
+      "POST",
+      courseEndpoint.GET_FULL_COURSE_DETAILS,
+      { _id: courseid },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+    result = response?.data;
+  } catch (error) {
+    console.log("GET FULL COURSE DETAILS API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
 };
 
 export const getinstructorcourses = async (token) => {
@@ -331,6 +352,67 @@ export const deleteSubSection = async (data, token) => {
   } catch (error) {
     console.log("DELETE_SUBSECTION_API ERROR RESPONSE............", error);
     toast.error("Could Not Delete Subsection");
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+// create a rating for course
+export const createRating = async (data, token) => {
+  const toastId = toast.loading("Loading...");
+  let success = false;
+  try {
+    const response = await apiconnector(
+      "POST",
+      courseEndpoint.CREATE_RATING_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log("CREATE RATING API RESPONSE............", response);
+    if (!response?.data?.success) {
+      throw new Error("Could Not Create Rating");
+    }
+    toast.success("Rating Created");
+    success = true;
+  } catch (error) {
+    success = false;
+    console.log("CREATE RATING API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return success;
+};
+
+// mark a lecture as complete
+export const markLectureAsComplete = async (data, token) => {
+  let result = null;
+  console.log("mark complete data", data);
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiconnector(
+      "POST",
+      courseEndpoint.LECTURE_COMPLETION_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log(
+      "MARK_LECTURE_AS_COMPLETE_API API RESPONSE............",
+      response
+    );
+
+    if (!response.data.message) {
+      throw new Error(response.data.error);
+    }
+    toast.success("Lecture Completed");
+    result = true;
+  } catch (error) {
+    console.log("MARK_LECTURE_AS_COMPLETE_API API ERROR............", error);
+    toast.error(error.message);
+    result = false;
   }
   toast.dismiss(toastId);
   return result;

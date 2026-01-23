@@ -9,6 +9,7 @@ import LearningLanguageSection from "../component/core/Homepage/LearningLanguage
 import InstructorSection from "../component/core/Homepage/InstructorSection";
 import Exploremore from "../component/core/Homepage/Exploremore";
 import Footer from "../common/Footer";
+import ReviewSlider from "../component/core/Homepage/ReviewSlider";
 const Home = () => {
   return (
     <div>
@@ -153,7 +154,7 @@ const Home = () => {
         <h2 className="text-3xl font-semibold text-center mt-10">
           Review from other learner
         </h2>
-        {/* review slide here */}
+        <ReviewSlider/>
       </div>
       {/* footer */}
       <div className=" bg-richblack-800">

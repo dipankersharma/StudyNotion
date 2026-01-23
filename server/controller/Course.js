@@ -7,6 +7,8 @@ const subSection = require("../model/subSection");
 const mongoose = require("mongoose");
 // const section = require("../model/section");
 const section = require("../model/section");
+const courseProgress = require("../model/courseProgress");
+const convertSecondsToDuration = require("../utils/secToDuration");
 
 // create course
 
@@ -300,7 +302,6 @@ exports.getCourseDetails = async (req, res) => {
 
     const courseDetails = await Course.findById(_id)
       .populate("category")
-      .populate("studentsEnroll")
       .populate({
         path: "courseInstructor",
         populate: { path: "additionalDetails" },
@@ -313,7 +314,7 @@ exports.getCourseDetails = async (req, res) => {
       })
       // .populate("ratingAndreviews")
       .exec();
-    console.log(courseDetails);
+    // console.log(courseDetails);
 
     let totalDurationInSeconds = 0;
     courseDetails.courseSections.forEach((section) => {
@@ -333,6 +334,68 @@ exports.getCourseDetails = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server Error while fetching course details",
+      error: error.message,
+    });
+  }
+};
+
+exports.getFullCourseDetails = async (req, res) => {
+  const _id = req.body;
+
+  if (!_id) {
+    return res.status(400).json({
+      success: false,
+      message: "Course id is required",
+    });
+  }
+  try {
+    const courseDetails = await Course.findById( _id )
+      .populate("category")
+      .populate({
+        path: "courseInstructor",
+        populate: { path: "additionalDetails" },
+      })
+      .populate({
+        path: "courseSections",
+        populate: { path: "subSections" },
+      })
+      .populate("ratingAndReviews");
+
+    if (!courseDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+    let totalDurationInSeconds = 0;
+    courseDetails.courseSections.forEach((section) => {
+      section.subSections.forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.videoDuration);
+        totalDurationInSeconds += timeDurationInSeconds;
+      });
+    });
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
+
+    const courseProgressCount = await courseProgress.findOne({
+      courseId: _id,
+      userId: req.user.id,
+    });
+
+    console.log("courseProgressCount", courseProgressCount);
+    return res.status(200).json({
+      success: true,
+      message: "Full course details fetched successfully",
+      data: courseDetails,
+      totalDuration,
+      completedVideos: courseProgressCount?.completedVideos
+        ? courseProgressCount.completedVideos
+        : [],
+    });
+  } catch (error) {
+    console.error("Error in fetching full course details", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error while fetching full course details",
       error: error.message,
     });
   }

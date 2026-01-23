@@ -3,6 +3,7 @@ const User = require("../model/user");
 const Course = require("../model/courses");
 const cloudinary = require("cloudinary").v2;
 const courseProgress = require("../model/courseProgress");
+const convertSecondsToDuration = require("../utils/secToDuration");
 
 // update profile
 exports.updateProfile = async (req, res) => {
@@ -216,7 +217,7 @@ exports.updateProfilePicture = async (req, res) => {
 exports.getEnrolledCourses = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userDetails = await User.findById({ _id: userId })
+    let userDetails = await User.findById({ _id: userId })
       .populate({
         path: "courses",
         populate: { path: "courseSections", populate: { path: "subSections" } },
@@ -229,20 +230,24 @@ exports.getEnrolledCourses = async (req, res) => {
       var totalDurationsInSeconds = 0;
       subSectionLength = 0;
       for (var j = 0; j < userDetails.courses[i].courseSections.length; j++) {
+        // FIX: use reduce, not replace
         totalDurationsInSeconds += userDetails.courses[i].courseSections[
           j
-        ].subSections.replace((acc, curr) => acc + curr.videoDuration, 0);
+        ].subSections.reduce((acc, curr) => acc + (curr.videoDuration || 0), 0);
+
         userDetails.courses[i].totalDuration = convertSecondsToDuration(
           totalDurationsInSeconds
         );
+
+        // If you want to count total subSections:
         subSectionLength +=
-          userDetails.courses[i].courseContent[j].subSection.length;
+          userDetails.courses[i].courseSections[j].subSections.length;
       }
       let courseProgressCount = await courseProgress.findOne({
         userId: userId,
         courseId: userDetails.courses[i]._id,
       });
-      courseProgressCount = courseProgressCount?.completedVideos.length;
+      courseProgressCount = courseProgressCount?.completedVideos.length || 0;
       if (subSectionLength === 0) {
         userDetails.courses[i].progressPercentage = 0;
       } else {
@@ -269,6 +274,35 @@ exports.getEnrolledCourses = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server Error while fetching enrolled courses: " + error.message,
+    });
+  }
+};
+
+exports.instructorDashboard = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const courseDetails = await Course.find({ courseInstructor: userId });
+    const courseData = courseDetails.map((course, idx) => {
+      const totalEnrolledStudents = course.studentsEnroll.length;
+      const totalIncome = totalEnrolledStudents * course?.price;
+
+      // create new object with course details
+      const instructorDashboardData = {
+        _id: course?._id,
+        courseName: course?.courseName,
+        totalEnrolledStudents,
+        totalIncome,
+      };
+
+      return instructorDashboardData;
+    });
+
+    res.status(200).json({ courses: courseData });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error while fetching instructor dashboard",
+      error: error.message,
     });
   }
 };

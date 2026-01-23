@@ -26,7 +26,7 @@ const ProfileUpdate = () => {
         dateOfBirth: "",
         contactNumber: "",
         gender: "",
-        about: "",
+        : "",
       });
     }
   }, [isSubmitSuccessful, reset]);

@@ -93,8 +93,12 @@ const Navbar = () => {
         <div className=" hidden md:flex items-center gap-x-4">
           {user && user.accountType !== "Instructor" && (
             <Link to={"/dashboard/cart"} className="relative">
-              <i class="ri-shopping-cart-fill">
-                {totalItems > 0 && <span>{totalItems}</span>}
+              <i class="ri-shopping-cart-fill text-2xl text-richblack-100">
+                 {totalItems > 0 && (
+                <span className="absolute -top-1 -right-2 grid h-5 w-5 place-items-center overflow-hidden rounded-full bg-richblack-500 text-center text-xs font-bold text-yellow-100">
+                  {totalItems}
+                </span>
+              )}
               </i>
             </Link>
           )}

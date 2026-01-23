@@ -8,6 +8,7 @@ const {
   deleteAccount,
   updateProfilePicture,
   getEnrolledCourses,
+  instructorDashboard,
 } = require("../controller/Profile");
 
 const {
@@ -24,5 +25,11 @@ routes.get("/getUserDetails", authentication, getUserDetails);
 routes.delete("/deleteAccount", authentication, deleteAccount);
 routes.put("/updateProfilePicture", authentication, updateProfilePicture);
 routes.get("/getenrolledcourses", authentication, getEnrolledCourses);
+routes.get(
+  "/instructorDashboard",
+  authentication,
+  isInstructor,
+  instructorDashboard
+);
 
 module.exports = routes;

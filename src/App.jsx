@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
 import "./App.css";
 import Navbar from "./common/Navbar";
-import Login from "./page/login";
+import Login from "./page/Login";
 import Signup from "./page/Signup";
 import ForgotPassword from "./page/ForgotPassword";
 import ResetPassword from "./page/ResetPassword";
@@ -22,6 +22,11 @@ import { useSelector } from "react-redux";
 import Addcourse from "./component/core/Dashboard/AddCourse/Addcourse";
 import Mycourse from "./component/core/Dashboard/Mycourse";
 import Editcourse from "./component/core/Dashboard/Edit Course/Editcourse";
+import Catalog from "./page/Catalog";
+import CourseDetail from "./page/CourseDetail";
+import ViewPoint from "./page/ViewPoint";
+import VideoDetails from "./component/core/viewCourse/VideoDetails";
+import Instructor from "./component/InstructorDashboard/Instructor";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -30,6 +35,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="catalog/:name" element={<Catalog />} />
+        <Route path="courses/:courseId" element={<CourseDetail />} />
         <Route
           path="/login"
           element={
@@ -138,8 +145,34 @@ function App() {
               {" "}
               <Route path="/dashboard/add-course" element={<Addcourse />} />
               <Route path="/dashboard/my-courses" element={<Mycourse />} />
-              <Route path="/dashboard/edit-course/:id" element={<Editcourse />} />
+              <Route
+                path="/dashboard/instructor"
+                element={
+                  <PrivateRoute>
+                    <Instructor />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/dashboard/edit-course/:id"
+                element={<Editcourse />}
+              />
             </>
+          )}
+        </Route>
+
+        <Route
+          element={
+            <PrivateRoute>
+              <ViewPoint />
+            </PrivateRoute>
+          }
+        >
+          {user && user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <Route
+              path="/view-course/:courseId/section/:sectionId/sub-Section/:subSectionId"
+              element={<VideoDetails />}
+            />
           )}
         </Route>
       </Routes>

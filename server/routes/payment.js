@@ -5,12 +5,19 @@ const routes = express.Router();
 const {
   capturePayment,
   verifySignature,
+  sendPaymentSuccessEmail,
 } = require("../controller/PaymentIntegration");
 const { authentication, isStudent } = require("../middleware/auth");
 
 // payment routes
 
-routes.post("/createpayment", authentication, capturePayment);
-routes.post("/verifySignature", verifySignature);
+routes.post("/createpayment", authentication, isStudent, capturePayment);
+routes.post("/verifysignature", authentication, isStudent, verifySignature);
+routes.post(
+  "/SuccessEmail",
+  authentication,
+  isStudent,
+  sendPaymentSuccessEmail
+);
 
 module.exports = routes;

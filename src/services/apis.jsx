@@ -12,7 +12,9 @@ export const AuthEndpoint = {
 export const categories = {
   CATEGORIES_URL: REACT_APP_BASE_URL + "/course/getallcategories",
 };
-
+export const reviewsEndpoint = {
+  GET_REVIEWS_API: REACT_APP_BASE_URL + "/course/getallreviewsandratings",
+};
 export const SettingsEndpoint = {
   UPDATE_PROFILE_PICTURE_API:
     REACT_APP_BASE_URL + "/profile/updateProfilePicture",
@@ -22,6 +24,13 @@ export const SettingsEndpoint = {
 };
 export const profileEndpoint = {
   GET_ENROLLED_COURSES: REACT_APP_BASE_URL + "/profile/getenrolledcourses",
+  GET_INSTRUCTOR_DATA: REACT_APP_BASE_URL + "/profile/instructorDashboard",
+};
+
+export const studentEndpoint = {
+  COURSE_PAYMENT_API: REACT_APP_BASE_URL + "/payment/createpayment",
+  COURSE_VERIFICATION_API: REACT_APP_BASE_URL + "/payment/verifysignature",
+  COURSE_SUCCESS_EMAIL_API: REACT_APP_BASE_URL + "/payment/successEmail",
 };
 export const courseEndpoint = {
   EDIT_COURSE_DETAILS: REACT_APP_BASE_URL + "/course/editcourse",
@@ -35,4 +44,11 @@ export const courseEndpoint = {
   GET_INSTRUCTOR_COURSES: REACT_APP_BASE_URL + "/course/getinstructorcourses",
   DELETE_COURSE: REACT_APP_BASE_URL + "/course/deletecourse",
   FETCH_COURSE_DETAILS: REACT_APP_BASE_URL + "/course/getCourseDetails",
+  GET_FULL_COURSE_DETAILS: REACT_APP_BASE_URL + "/course/getfullcoursedetails",
+  CREATE_RATING_API: REACT_APP_BASE_URL + "/course/createrating",
+  LECTURE_COMPLETION_API: REACT_APP_BASE_URL + "/course/updateCourseProgress",
+};
+export const pageAndComponentDeatils = {
+  GET_CATEEGORY_DETAILS:
+    REACT_APP_BASE_URL + "/course/getcategoriespagedetails",
 };

@@ -37,4 +37,4 @@ function RatingStars({Review_Count, Star_Size}) {
 
     }
 
-    export default RatingStars
+    export default RatingStars;

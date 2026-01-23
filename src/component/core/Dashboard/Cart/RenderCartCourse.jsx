@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ReactStars } from "react-stars";
+import  ReactStars  from "react-stars";
 import { removeToCart } from "../../../../slices/cartSlice";
 
 const RenderCartCourse = () => {
@@ -8,13 +8,15 @@ const RenderCartCourse = () => {
   const dispatch = useDispatch();
   return (
     <div className="flex flex-col flex-1">
-      {cart.map((course, index) => {
+      
+      {cart.map((course, index) => ( 
         <div
-          key={index}
+          key={course?._id}
           className={`flex w-full flex-wrap items-start justify-between gap-6 ${
             index !== cart.length - 1 && "border-b border-b-richblack-400 pb-6"
           } ${index !== 0 && "mt-6"} `}
         >
+           con
           <div className="flex flex-1 flex-col gap-4 xl:flex-row">
             <img
               src={course.thumbnail}
@@ -47,7 +49,7 @@ const RenderCartCourse = () => {
             </div>
             <div className="flex flex-col items-end space-y-2">
               <button
-                onClick={() => dispatch(removeToCart(course._id))}
+                onClick={() => dispatch(removeToCart(course?._id))}
                 className="flex items-center gap-x-1 rounded-md border border-richblack-600 bg-richblack-700 py-3 px-[12px] text-pink-200"
               >
                 <i class="ri-delete-bin-6-fill"></i>
@@ -58,8 +60,8 @@ const RenderCartCourse = () => {
               </p>
             </div>
           </div>
-        </div>;
-      })}
+        </div>
+      ))}
     </div>
   );
 };
